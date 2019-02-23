@@ -7,7 +7,7 @@ package principal;
 
 /**
  *
- * @author bruno
+ * @author bruno santana andrade
  */
 public class main {
     public static void main(String[] args) {
