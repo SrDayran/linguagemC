@@ -11,7 +11,7 @@ package principal;
  */
 public class main {
     public static void main(String[] args) {
-        funcionario f = new funcionario("Bruno Santana", 21, "CPF", "EMAIL", "CARREGADOR", 998, 29, 3);
+        /*     funcionario f = new funcionario("Bruno Santana", 21, "CPF", "EMAIL", "CARREGADOR", 998, 29, 3);
         System.out.println(f.getNome());
         System.out.println(f.getEmail());
         System.out.println(f.getIdade());
@@ -23,6 +23,8 @@ public class main {
         
         f.andar();
         
-        f.andar(20);
+        f.andar(20);*/
+        
+        new Relatorio().criar();
     }
 }
