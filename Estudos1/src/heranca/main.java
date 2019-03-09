@@ -32,7 +32,7 @@ public class main {
         f.setEmail("augustopereiraagu@gmail.com");
         f.setSalario(998.57f);
         
-        f.imprimirDados();
+        f.imprimirDados();  
         
     }
     
