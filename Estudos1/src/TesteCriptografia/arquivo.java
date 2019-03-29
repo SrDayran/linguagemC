@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -28,6 +30,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author bruno
  */
 public class arquivo {
+    
+    public arquivo() {
+        try {
+            criptografar();
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+            Logger.getLogger(arquivo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void ler () {
             try {
                 String caminho = "C:\\Users\\bruno\\Documents\\Bruno Sana\\Dreamers\\teste_cripto.txt";
@@ -59,14 +70,17 @@ public class arquivo {
      // Texto puro
      byte[] textoPuro = "Exemplo de texto puro".getBytes();
  
-     System.out.println("Texto [Formato de Byte] : " + textoPuro);
+     System.out.println("Texto [Formato de Byte] : ");
+     
+     for (byte b: textoPuro) System.out.println("Byte[] " + b);
+     
      System.out.println("Texto Puro : " + new String(textoPuro));
  
      // Texto encriptado
      byte[] textoEncriptado = cifraDES.doFinal(textoPuro);
  
      System.out.println("Texto Encriptado : " + textoEncriptado);
- 
+ for (byte b: textoEncriptado) System.out.println("Byte[] " + b);
      // Inicializa a cifra também para o processo de decriptação
      cifraDES.init(Cipher.DECRYPT_MODE, chaveDES);
  
@@ -74,5 +88,6 @@ public class arquivo {
      byte[] textoDecriptografado = cifraDES.doFinal(textoEncriptado);
  
      System.out.println("Texto Decriptografado : " + new String(textoDecriptografado)); 
+     
     }
 }
