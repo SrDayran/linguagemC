@@ -38,7 +38,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class arquivo {
     int seq[] = new int[300];
     String p_url = "jdbc:mysql://localhost:3306/santoamarofit_teste",
-            p_user = "day_gay", p_pass = "dou123";
+            p_user = "root", p_pass = "admin123";
     String caminho = "C:\\Users\\bruno\\Documents\\Bruno Sana\\Dreamers\\teste_cripto.txt";
     String caminho_seq = "C:\\Users\\bruno\\Documents\\Bruno Sana\\Dreamers\\seq.txt";
     String key = "ZE/pMbZJON8=";
@@ -90,7 +90,6 @@ public class arquivo {
         try {
             int indice = 0;
             loadSequence();
-            //4 + 12
             
             if (url.length() + user.length() + pass.length() + 16 > 299) System.out.println("Vai dar merda");
             //Abrindo arquivo e setando Buffer de Escrita
@@ -100,10 +99,40 @@ public class arquivo {
             
             //Gerando Chave de Criptografia
             SecretKey secretKey = KeyGenerator.getInstance("DES").generateKey();
-            // get base64 encoded version of the key
+            
+            //Convertendo a Key em String para salvar no arquivo:
             String key_string = Base64.getEncoder().encodeToString(secretKey.getEncoded());
             char key_values[] = key_string.toCharArray();
             System.out.println("Key Berore: " + key_string);
+            
+            //Criptografando os Dados:
+            Cipher cifraDES;
+            cifraDES = Cipher.getInstance("DES/ECB/PKCS5Padding");
+            // Inicializa a cifra para o processo de encriptação
+            cifraDES.init(Cipher.ENCRYPT_MODE, secretKey);
+            
+            byte[] url_decript = p_url.getBytes();
+            byte[] url_encript = cifraDES.doFinal(url_decript);
+            
+            byte[] user_decript = p_user.getBytes();
+            byte[] user_encript = cifraDES.doFinal(user_decript);
+            
+            byte[] pass_decript = p_pass.getBytes();
+            byte[] pass_encript = cifraDES.doFinal(pass_decript);
+            
+            String s_url_encript = Base64.getEncoder().encodeToString(url_encript);
+            String s_user_encript = Base64.getEncoder().encodeToString(user_encript);
+            String s_pass_encript = Base64.getEncoder().encodeToString(pass_encript);
+            
+            
+            
+            System.out.println("Criptografado url (Before) : " + s_url_encript);
+            System.out.println("Criptografado user (Before) : " + s_user_encript);
+            System.out.println("Criptografado pass (Before) : " + s_pass_encript);
+            
+            
+            //INSERINDO KEY
+            
             char linha[] = new char[300];
             for(int i = 0; i<12; i++){
                 indice = i;
@@ -112,25 +141,32 @@ public class arquivo {
             
             linha[seq[++indice]] = '#';
             
-            char url_values[] = url.toCharArray();
-            for(int i = 0; i<url.length(); i++) {
+            //INSERINDO URL CRIPTOGRAFADA
+            
+            char url_values[] = s_url_encript.toCharArray();
+            for(int i = 0; i<s_url_encript.length(); i++) {
                 indice++;
                 linha[seq[indice]] = url_values[i];
             }
             
             linha[seq[++indice]] = '#';
-            char user_values[] = user.toCharArray();
+            
+            //INSERINDO USER CRIPTOGRAFADO
+            
+            char user_values[] = s_user_encript.toCharArray();
             max_indice = indice;
-            for(int i = 0; i<user.length(); i++){
+            for(int i = 0; i<s_user_encript.length(); i++){
                 indice++;
                 linha[seq[indice]] = user_values[i];
             }
             
             linha[seq[++indice]] = '#';
             
-            char pass_values[] = pass.toCharArray();
+            //INSERINDO PASS CRIPTOGRAFADO            
             
-            for(int i = 0; i<pass.length(); i++){
+            char pass_values[] = s_pass_encript.toCharArray();
+            
+            for(int i = 0; i<s_pass_encript.length(); i++){
                 indice++;
                 linha[seq[indice]] = pass_values[i];
             }
@@ -161,9 +197,7 @@ public class arquivo {
            //bw.newLine();
            capturarDados();
             
-        } catch (IOException ex) {
-            Logger.getLogger(arquivo.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
+        } catch (IOException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
             Logger.getLogger(arquivo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -177,7 +211,6 @@ public class arquivo {
             if (linha.length() != 300) System.out.println("Deu merda");
             char values[] = linha.toCharArray();
             System.out.println("Values - " + values.toString());
-            //Key, Url, User, Pass
             int indice = 0;
             String des_key = "";
             String des_url = "", des_user = "", des_pass = "";
@@ -199,18 +232,43 @@ public class arquivo {
                 if(values[seq[i]] == '#') break;
                 des_pass += Character.toString(values[seq[i]]);
             }
-            
+
             System.out.println("KEY: " + des_key);
             System.out.println("URL: " + des_url);
             System.out.println("USER: " + des_user);
             System.out.println("PASS: " + des_pass);
             
             
+            //DESCRIPTOGRAFANDO ARQUIVOS:
+            
+            byte[] decodedKey = Base64.getDecoder().decode(des_key);
+            byte[] decode_url = Base64.getDecoder().decode(des_url);
+            byte[] decode_user = Base64.getDecoder().decode(des_user);
+            byte[] decode_pass= Base64.getDecoder().decode(des_pass);
+            
+            SecretKey decripted_key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES"); 
+            Cipher cifraDES = Cipher.getInstance("DES/ECB/PKCS5Padding");
+            cifraDES.init(Cipher.DECRYPT_MODE, decripted_key);
+            
+            byte[] dec_url = cifraDES.doFinal(decode_url);
+            byte[] dec_user = cifraDES.doFinal(decode_user);
+            byte[] dec_pass = cifraDES.doFinal(decode_pass);
+            
+            String final_url = new String(dec_url);
+            String final_user = new String(dec_user);
+            String final_pass = new String(dec_pass);
+            
+            System.out.println("URL (DESCRIPTOGRAFADA): " + final_url);
+            System.out.println("USER (DESCRIPTOGRAFADA): " + final_user);
+            System.out.println("PASS (DESCRIPTOGRAFADA): " + final_pass);
+            
             fr.close();
             br.close();
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
             Logger.getLogger(arquivo.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (IOException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException ex) {
+            Logger.getLogger(arquivo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalBlockSizeException | BadPaddingException ex) {
             Logger.getLogger(arquivo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
