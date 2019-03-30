@@ -89,8 +89,6 @@ public class login extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        new TesteCriptografia.arquivo();
-/*
         char caracteres[] = senha.getPassword();
         if(login.getText().equals("brunosana") && String.valueOf(caracteres).equals("123456")){
             new Banco().setVisible(true);
@@ -98,7 +96,6 @@ public class login extends javax.swing.JFrame {
         }else{
             JOptionPane.showMessageDialog(null, "Dados incorretos!", "Falha na Autenticação", JOptionPane.ERROR_MESSAGE);
         }
-*/
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

@@ -43,9 +43,11 @@ public class arquivo {
     String caminho_seq = "C:\\Users\\bruno\\Documents\\Bruno Sana\\Dreamers\\seq.txt";
     String key = "ZE/pMbZJON8=";
     int max_indice;
+    String[] dados = new String[6];
     public arquivo() {
-            //criptografar();
-            gerarArquivoCriptografado(p_url, p_user, p_pass);
+    }
+    public arquivo(String[] dados){
+        this.dados = dados;
     }
     
     public void loadSequence(){
@@ -111,13 +113,13 @@ public class arquivo {
             // Inicializa a cifra para o processo de encriptação
             cifraDES.init(Cipher.ENCRYPT_MODE, secretKey);
             
-            byte[] url_decript = p_url.getBytes();
+            byte[] url_decript = url.getBytes();
             byte[] url_encript = cifraDES.doFinal(url_decript);
             
-            byte[] user_decript = p_user.getBytes();
+            byte[] user_decript = user.getBytes();
             byte[] user_encript = cifraDES.doFinal(user_decript);
             
-            byte[] pass_decript = p_pass.getBytes();
+            byte[] pass_decript = pass.getBytes();
             byte[] pass_encript = cifraDES.doFinal(pass_decript);
             
             String s_url_encript = Base64.getEncoder().encodeToString(url_encript);
@@ -129,7 +131,9 @@ public class arquivo {
             System.out.println("Criptografado url (Before) : " + s_url_encript);
             System.out.println("Criptografado user (Before) : " + s_user_encript);
             System.out.println("Criptografado pass (Before) : " + s_pass_encript);
-            
+            dados[0] = s_url_encript;
+            dados[1] = s_user_encript;
+            dados[2] = s_pass_encript;
             
             //INSERINDO KEY
             
@@ -261,6 +265,11 @@ public class arquivo {
             System.out.println("URL (DESCRIPTOGRAFADA): " + final_url);
             System.out.println("USER (DESCRIPTOGRAFADA): " + final_user);
             System.out.println("PASS (DESCRIPTOGRAFADA): " + final_pass);
+            
+            dados[3] = final_url;
+            dados[4] = final_user;
+            dados[5] = final_pass;
+            
             
             fr.close();
             br.close();
