@@ -13,7 +13,7 @@ package heranca;
 public class funcionario extends pessoa{
     private String email;
     private float salario;
-
+    
     public String getEmail() {
         return email;
     }
