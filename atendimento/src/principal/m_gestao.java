@@ -5,6 +5,7 @@
  */
 package principal;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -39,6 +40,9 @@ public class m_gestao extends javax.swing.JFrame {
         initComponents();
         this.atual = atual;
         this.anterior = anterior;
+        tabela.setFillsViewportHeight(true);
+        tabela.setBackground(new Color(255,255,255));
+        tabela.setOpaque(true);
     }
 
     /**
