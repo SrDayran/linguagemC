@@ -2,6 +2,8 @@
 
 Sistema de Biblioteca
 
+Diagrama [Aqui](https://1drv.ms/u/s!Agj13lMyx9uRkA5DxlJh3pA-ITIK?e=HhjG0u)
+
 -- Informação
 -> Livros são emprestados por 7 dias!
 -> Livros podem ser renovados até 3 vezes
